@@ -1,0 +1,10 @@
+for nice looking forms
+pip3 install flask-wtf
+
+pip3 install email-validator
+
+to encrypt password
+pip3 install flask_bcrypt
+
+to handel login
+pip3 install flask_login

@@ -1,0 +1,62 @@
+<style>
+    .modal-content {
+      background-color: azure;
+      color: #212121;
+    }
+  </style>
+  
+  <!-- More Info -->
+  <div class="modal fade" id="Modal-MoreInfo-{{ item.id }}"
+       tabindex="-1"
+       aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="ModalLabel">
+            <!-- -->
+            {{ item.name }}
+          </h4>
+          <button type="button" class="close"
+                  data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h6>
+            {{ item.description }}
+          </h6>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Purchase Confirm -->
+  <div class="modal fade" id="Modal-PurchaseConfirm-{{ item.id }}"
+       tabindex="-1"
+       aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ModalLabel">
+            <!-- -->
+            {{ item.name }}
+          </h5>
+          <button type="button" class="close"
+                  data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h4>
+            Are you sure you want to buy {{ item.name }} for {{ item.price }}$ ?
+          </h4>
+          <br>
+          <form method="POST">
+            {{ purchase_form.hidden_tag() }}
+            <input name="purchased_item" type="hidden" value="{{ item.id }}">
+            {{ purchase_form.submit(class="btn btn-success btn-block") }}
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>

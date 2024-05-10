@@ -2,7 +2,6 @@
 {% block content %}
     <div class="container">
         <h1 class="h3 mb-3 font-weigh-normal" style="margin-top: 5%;">Create a new account</h1>
-        <br>
         <form method="post" class="form-register">
             <!-- for security-->
             {{ form.hidden_tag() }}
@@ -21,5 +20,6 @@
             <br>
             {{ form.submit(class="btn btn-log btn-block btn-primary") }}
         </form>
+        <a style="color: white; position: absolute; margin-top: 1%;" href="{{ url_for('login_page') }}">You have an account?  Log in</a>
     </div>
 {% endblock %}

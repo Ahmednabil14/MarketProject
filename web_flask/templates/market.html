@@ -1,33 +1,42 @@
 {% extends "base.html"%}
 {% block content %}
-    <table class="table table-hover table-dark" style="text-align: center;">
-        <thead>
-            <tr>
-                <!-- Your Columns HERE table head -->
-                <th scope="col">ID</th>
-                <th scope="col">Name</th>
-                <th scope="col">Barcode</th>
-                <th scope="col">Price</th>
-                <th scope="col">Options</th>
-            </tr>
-        </thead>
-        <!-- table body-->
-        <tbody>
-            <!-- Your rows inside the table HERE: -->
-            <!-- table row-->
-            {% for item in items %}
-                <tr>
-                    <!-- table data -->
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.barcode }}</td>
-                    <td>{{ item.price }}$</td>
-                    <td>
-                        <button class="btn btn-outline btn-info">More Info</button>
-                        <button class="btn btn-outline btn-success">Purchase</button>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-8" style="margin-top: 2%;">
+            <h3 style="text-align: center; margin-bottom: 2%;">Available items</h3>
+            <table class="table table-hover table-dark" style="text-align: center;">
+                <thead>
+                    <tr>
+                        <!-- Your Columns HERE table head -->
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Barcode</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Options</th>
+                    </tr>
+                </thead>
+                <!-- table body-->
+                <tbody>
+                    <!-- Your rows inside the table HERE: -->
+                    <!-- table row-->
+                    {% for item in items %}
+                        {% include 'includes/items_modals.html' %}
+                        <tr>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.barcode }}</td>
+                        <td>{{ item.price }}$</td>
+                        <td>
+                            <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ item.id }}">More Info</button>
+                            <button class="btn btn-outline btn-success" data-toggle="modal" data-target="#Modal-PurchaseConfirm-{{ item.id }}">Purchase</button>
+                        </td>
+                        </tr>
+                        {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-4" style="margin-top: 2%;">
+            <h3 style="text-align: center; margin-bottom: 2%;">My items</h3>
+        </div>
+    </div>
+    
 {% endblock %}

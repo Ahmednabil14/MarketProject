@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <h1 class="h3 mb-3 font-weigh-normal" style="margin-top: 5%;">Log in to your account</h1>
+        <br>
+        <form method="post" class="form-signin">
+            <!-- for security-->
+            {{ form.hidden_tag() }}
+
+            {{ form.email.label() }}
+            {{ form.email(class="form-control", placeholder='Enter Your Email') }}
+
+            <br>
+            
+            {{ form.password.label() }}
+            {{ form.password(class="form-control", placeholder='Enter Your Password') }}
+
+            <br>
+            {{ form.submit(class="btn btn-log btn-block btn-primary") }}
+        </form>
+        <a style="color: white; margin-top: 1%; position: absolute;" href="{{ url_for('register_page') }}">Don't have an account?  Sign up</a>
+    </div>
+{% endblock %}
