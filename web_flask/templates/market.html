@@ -35,7 +35,27 @@
             </table>
         </div>
         <div class="col-4" style="margin-top: 2%;">
-            <h3 style="text-align: center; margin-bottom: 2%;">My items</h3>
+            <h3 style="text-align: center; margin-bottom: 4%;">My items</h3>
+            <div class="row">
+                {% for item in my_items %}
+                {% include 'includes/owned_items_modal.html' %}
+                    <div class="col-md-6">
+                        <div style="margin-bottom: 5px" class="card text-center bg-dark">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ item.name }}</h5>
+                                <button type="button" class="btn btn-outline-danger" style="margin-bottom: 5px"
+                                       data-toggle="modal" data-target="#Modal-SellingConfirm-{{ item.id }}">
+                                   Sell this Item
+                                </button>
+                                <p class="card-text">
+                                    <strong>This item costs</strong><br>
+                                    <strong>{{ item.price }}</strong>$
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
     

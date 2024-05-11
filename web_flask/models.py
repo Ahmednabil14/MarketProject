@@ -19,6 +19,8 @@ class User(db.Model, UserMixin):
     budget = db.Column(db.Integer(), default=10000)
     items = db.relationship("Item", backref="owned_user", lazy=True)
 
+    def can_purchase(self, item_obj):
+        return self.budget >= item_obj.price
     @property
     def password(self):
         return self.hash_password
