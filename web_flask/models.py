@@ -9,6 +9,16 @@ from flask_login import UserMixin
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+
+class UserItem(db.Model):
+    user_id = db.Column(db.Integer(), db.ForeignKey(
+        "user.id", onupdate='CASCADE', ondelete='CASCADE'), primary_key=True)
+    item_id = db.Column(db.Integer(), db.ForeignKey(
+        "item.id", onupdate='CASCADE', ondelete='CASCADE'), primary_key=True)
+    quantity = db.Column(db.Integer(), default=0)
+    user = db.relationship("User", back_populates='associations')
+    item = db.relationship("Item", back_populates='associations')
+
 # should extends from USerMix in class
 class User(db.Model, UserMixin):
     """handel users table"""
@@ -17,10 +27,10 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(length=60), nullable=False, unique=True)
     hash_password = db.Column(db.String(length=60), nullable=False)
     budget = db.Column(db.Integer(), default=10000)
-    items = db.relationship("Item", backref="owned_user", lazy=True)
+    associations = db.relationship("UserItem", back_populates="user")
 
     def can_purchase(self, item_obj):
-        return self.budget >= item_obj.price
+        return self.budget >= item_obj.price and item_obj.in_stock > 0
     @property
     def password(self):
         return self.hash_password
@@ -52,9 +62,9 @@ class Item(db.Model):
     name = db.Column(db.String(length=30), nullable=False)
     barcode = db.Column(db.String(length=12), nullable=False, unique=True)
     price = db.Column(db.Integer(), nullable=False)
-    in_stock = db.Column(db.Integer(), nullable=False, default=3)
+    in_stock = db.Column(db.Integer(), nullable=False, default=1)
     description = db.Column(db.String(), nullable=False)
-    user_id = db.Column(db.Integer(), db.ForeignKey("user.id"))
+    associations = db.relationship("UserItem", back_populates="item")
 
     def __repr__(self):
         return ("Item: {}".format(self.name))

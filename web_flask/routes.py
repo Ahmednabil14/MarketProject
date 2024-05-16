@@ -3,7 +3,7 @@
 from web_flask import app, db
 # get_flashed_messages use for collecting error is one list
 from flask import render_template, redirect, url_for, flash, get_flashed_messages, request
-from web_flask.models import Item, User
+from web_flask.models import Item, User, UserItem
 from web_flask.forms import Register, Login, PurchaseItems, SellItem
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -23,20 +23,34 @@ def market_page():
         purchased_item_id = request.form.get("purchased_item")
         purchased_item_obj = Item.query.filter_by(id=purchased_item_id).first()
         if purchased_item_obj:
-            if current_user.can_purchase(purchased_item_obj) and purchased_item_obj.in_stock > 0:
+            if current_user.can_purchase(purchased_item_obj):
                 purchased_item_obj.in_stock -= 1
-                purchased_item_obj.user_id = current_user.id
+                existing_association = UserItem.query.filter_by(
+                        user_id=current_user.id, item_id=purchased_item_id).first()
+                if existing_association:
+                    existing_association.quantity += 1
+                else:
+                    # used for tables
+                    new_associate = UserItem(
+                        user_id=current_user.id, item_id=purchased_item_id, quantity=1)
+                    db.session.add(new_associate)
                 current_user.budget -= purchased_item_obj.price
                 db.session.commit()
                 flash("You purchased {} for {}$".format(
                     purchased_item_obj.name, purchased_item_obj.price), category="success")
             else:
                 flash("You don't have enough money !", category="danger")
+
         # for selling items
         sold_item_id = request.form.get("sold_item")
         sold_item_obj = Item.query.filter_by(id=sold_item_id).first()
         if sold_item_obj:
-            sold_item_obj.user_id = None
+            existing_association = UserItem.query.filter_by(user_id=current_user.id, item_id=sold_item_id).first()
+            if existing_association:
+                if existing_association.quantity > 1:
+                    existing_association.quantity -= 1
+                else:
+                    db.session.delete(existing_association)
             sold_item_obj.in_stock += 1
             current_user.budget += sold_item_obj.price
             db.session.commit()
@@ -45,9 +59,9 @@ def market_page():
         return redirect(url_for("market_page"))
 
     if request.method == "GET":
-        items = Item.query.filter_by(user_id=None)
-        my_items = Item.query.filter_by(user_id=current_user.id)
-        # items = Item.query.filter(Item.in_stock > 0)
+        # items = Item.query.filter_by(user_id=None)
+        my_items = Item.query.filter(Item.associations.any(user_id=current_user.id))
+        items = Item.query.filter(Item.in_stock > 0)
         return render_template("market.html", items=items, purchase_form=purchase_form,
                                my_items=my_items, selling_form=selling_form)
 

@@ -11,6 +11,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Barcode</th>
                         <th scope="col">Price</th>
+                        <th scope="col">In Stock</th>
                         <th scope="col">Options</th>
                     </tr>
                 </thead>
@@ -25,6 +26,7 @@
                         <td>{{ item.name }}</td>
                         <td>{{ item.barcode }}</td>
                         <td>{{ item.price }}$</td>
+                        <td>{{ item.in_stock }}</td>
                         <td>
                             <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ item.id }}">More Info</button>
                             <button class="btn btn-outline btn-success" data-toggle="modal" data-target="#Modal-PurchaseConfirm-{{ item.id }}">Purchase</button>
@@ -42,7 +44,14 @@
                     <div class="col-md-6">
                         <div style="margin-bottom: 5px" class="card text-center bg-dark">
                             <div class="card-body">
-                                <h5 class="card-title">{{ item.name }}</h5>
+                                <div>
+                                    <h5 class="card-title">{{ item.name }}</h5>
+                                    {% for association in item.associations %}
+                                        {% if association.user_id == current_user.id%}
+                                        <p class="small">Quantity: {{ association.quantity }}</p>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
                                 <button type="button" class="btn btn-outline-danger" style="margin-bottom: 5px"
                                        data-toggle="modal" data-target="#Modal-SellingConfirm-{{ item.id }}">
                                    Sell this Item
