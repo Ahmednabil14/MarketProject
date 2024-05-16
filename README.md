@@ -12,7 +12,7 @@ Installation:
 To install and run SocialHub locally, follow these steps:
 
 1. Clone the repository: git clone https://github.com/Ahmednabil14/MarketProject
-2. Navigate to the project directory: cd Market
+2. Navigate to the project directory: cd MarketProject
 3. python3 -m venv venv
 4. Install dependencies: pip3 install -r requirements.txt
 5. Run the application: python3 -m run
